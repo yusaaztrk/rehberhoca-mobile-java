@@ -26,18 +26,13 @@ class Student {
      */
     public function login($email, $sifre) {
         try {
-            // SQL sorgusu - email ve şifre kontrolü
-            $query = "SELECT id, adSoyad, email, telefon, kayitTarihi, aktif
+            // SQL sorgusu - email ve şifre kontrolü (SQL Server tablo yapısına göre)
+            $query = "SELECT id, ad_soyad, email, telefon, kayit_tarihi, aktif
                      FROM " . $this->table_name . "
-                     WHERE email = :email AND sifre = :sifre AND aktif = 1";
+                     WHERE email = ? AND sifre = ?";
 
             $stmt = $this->conn->prepare($query);
-
-            // Parametreleri bağla
-            $stmt->bindParam(":email", $email);
-            $stmt->bindParam(":sifre", $sifre);
-
-            $stmt->execute();
+            $stmt->execute([$email, $sifre]);
 
             if($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
