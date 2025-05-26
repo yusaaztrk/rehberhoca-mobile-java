@@ -1,0 +1,99 @@
+{
+  "login_success": {
+    "success": true,
+    "message": "Giriş başarılı",
+    "student": {
+      "id": 1,
+      "adSoyad": "Ahmet Yılmaz",
+      "email": "test@rehberhoca.com",
+      "telefon": "05551234567",
+      "kayitTarihi": "2024-01-15T10:30:00",
+      "aktif": true
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  },
+  
+  "login_failure": {
+    "success": false,
+    "message": "Geçersiz e-posta veya şifre",
+    "student": null,
+    "token": null
+  },
+  
+  "student_courses": [
+    {
+      "id": 1,
+      "ad": "Java Programlama Temelleri",
+      "aciklama": "Java programlama dilinin temel kavramları ve nesne yönelimli programlama prensipleri",
+      "egitmen": "Dr. Mehmet Özkan",
+      "program": "Hafta içi Akşam",
+      "baslangicTarihi": "2024-02-01T18:00:00",
+      "bitisTarihi": "2024-04-30T21:00:00",
+      "aktif": true
+    },
+    {
+      "id": 2,
+      "ad": "Android Uygulama Geliştirme",
+      "aciklama": "Android platformu için mobil uygulama geliştirme teknikleri",
+      "egitmen": "Mühendis Ayşe Demir",
+      "program": "Hafta sonu",
+      "baslangicTarihi": "2024-03-01T09:00:00",
+      "bitisTarihi": "2024-06-30T17:00:00",
+      "aktif": true
+    },
+    {
+      "id": 3,
+      "ad": "Veritabanı Yönetimi",
+      "aciklama": "MySQL ve PostgreSQL veritabanı yönetimi ve optimizasyonu",
+      "egitmen": "Prof. Dr. Ali Kaya",
+      "program": "Online",
+      "baslangicTarihi": "2024-02-15T20:00:00",
+      "bitisTarihi": "2024-05-15T22:00:00",
+      "aktif": true
+    }
+  ],
+  
+  "empty_courses": [],
+  
+  "student_profile": {
+    "id": 1,
+    "adSoyad": "Ahmet Yılmaz",
+    "email": "test@rehberhoca.com",
+    "telefon": "05551234567",
+    "kayitTarihi": "2024-01-15T10:30:00",
+    "aktif": true
+  },
+  
+  "test_credentials": {
+    "valid": {
+      "email": "test@rehberhoca.com",
+      "password": "123456"
+    },
+    "invalid": {
+      "email": "wrong@email.com",
+      "password": "wrongpass"
+    }
+  },
+  
+  "api_endpoints": {
+    "base_url": "http://10.0.2.2:8080/",
+    "login": "api/mobile/login",
+    "student_courses": "api/mobile/student/{studentId}/courses",
+    "student_profile": "api/mobile/student/profile/{studentId}"
+  },
+  
+  "error_responses": {
+    "network_error": {
+      "message": "Ağ bağlantısı hatası"
+    },
+    "server_error": {
+      "message": "Sunucu hatası"
+    },
+    "unauthorized": {
+      "message": "Geçersiz e-posta veya şifre"
+    },
+    "validation_error": {
+      "message": "Geçersiz istek"
+    }
+  }
+}

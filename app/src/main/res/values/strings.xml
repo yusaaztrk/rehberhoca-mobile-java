@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Rehber Hoca</string>
+
+    <!-- Login Screen -->
+    <string name="login_title">Giriş Yap</string>
+    <string name="email_hint">E-posta</string>
+    <string name="password_hint">Şifre</string>
+    <string name="login_button">Giriş Yap</string>
+    <string name="forgot_password">Şifremi Unuttum</string>
+    <string name="login_loading">Giriş yapılıyor...</string>
+
+    <!-- Dashboard Screen -->
+    <string name="welcome_message">Hoş Geldiniz</string>
+    <string name="my_courses">Derslerim</string>
+    <string name="no_courses_message">Henüz atanmış dersiniz bulunmuyor</string>
+    <string name="refresh_courses">Dersleri Yenile</string>
+    <string name="logout">Çıkış Yap</string>
+    <string name="loading_courses">Dersler yükleniyor...</string>
+
+    <!-- Course Details -->
+    <string name="course_instructor">Eğitmen: %s</string>
+    <string name="course_schedule">Program: %s</string>
+    <string name="course_start_date">Başlangıç: %s</string>
+    <string name="course_end_date">Bitiş: %s</string>
+
+    <!-- Error Messages -->
+    <string name="error_email_required">E-posta adresi gerekli</string>
+    <string name="error_email_invalid">Geçerli bir e-posta adresi girin</string>
+    <string name="error_password_required">Şifre gerekli</string>
+    <string name="error_password_short">Şifre en az 6 karakter olmalı</string>
+    <string name="error_login_failed">Giriş başarısız</string>
+    <string name="error_network">Ağ bağlantısı hatası</string>
+    <string name="error_server">Sunucu hatası</string>
+    <string name="error_unknown">Bilinmeyen hata</string>
+    <string name="error_invalid_credentials">Geçersiz e-posta veya şifre</string>
+
+    <!-- General -->
+    <string name="ok">Tamam</string>
+    <string name="cancel">İptal</string>
+    <string name="retry">Tekrar Dene</string>
+    <string name="loading">Yükleniyor...</string>
+
+    <!-- Menu -->
+    <string name="menu_refresh">Yenile</string>
+    <string name="menu_logout">Çıkış Yap</string>
+
+    <!-- Logout Confirmation -->
+    <string name="logout_confirmation_title">Çıkış Yap</string>
+    <string name="logout_confirmation_message">Çıkış yapmak istediğinizden emin misiniz?</string>
+    <string name="logout_yes">Evet</string>
+    <string name="logout_no">Hayır</string>
+</resources>
