@@ -1,6 +1,7 @@
 package com.example.rehberhoca.network;
 
 import com.example.rehberhoca.models.Course;
+import com.example.rehberhoca.models.CoursesResponse;
 import com.example.rehberhoca.models.LoginRequest;
 import com.example.rehberhoca.models.LoginResponse;
 import com.example.rehberhoca.models.Student;
@@ -30,7 +31,7 @@ public interface ApiService {
      * @return List of programs assigned to the student
      */
     @GET("auth/student/{studentId}/programs")
-    Call<StudentProgramsResponse> getStudentPrograms(@Path("studentId") Long studentId);
+    Call<CoursesResponse> getStudentPrograms(@Path("studentId") Long studentId);
 
     /**
      * Get student profile information

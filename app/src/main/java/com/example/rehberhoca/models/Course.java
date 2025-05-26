@@ -5,41 +5,58 @@ import com.google.gson.annotations.SerializedName;
 public class Course {
     @SerializedName("id")
     private Long id;
-    
+
     @SerializedName("ad")
     private String ad;
-    
+
     @SerializedName("aciklama")
     private String aciklama;
-    
-    @SerializedName("egitmen")
-    private String egitmen;
-    
-    @SerializedName("program")
-    private String program;
-    
+
+    @SerializedName("kategori")
+    private String kategori;
+
+    @SerializedName("seviye")
+    private String seviye;
+
+    @SerializedName("sure")
+    private Integer sure;
+
+    @SerializedName("kapasite")
+    private Integer kapasite;
+
+    @SerializedName("durum")
+    private String durum;
+
     @SerializedName("baslangicTarihi")
-    private String baslangicTarihi; // Using String for easier JSON parsing
-    
+    private String baslangicTarihi;
+
     @SerializedName("bitisTarihi")
-    private String bitisTarihi; // Using String for easier JSON parsing
-    
+    private String bitisTarihi;
+
+    @SerializedName("olusturmaTarihi")
+    private String olusturmaTarihi;
+
     @SerializedName("aktif")
-    private Boolean aktif;
+    private Integer aktif;
 
     // Default constructor
     public Course() {}
 
     // Constructor with all fields
-    public Course(Long id, String ad, String aciklama, String egitmen, String program, 
-                  String baslangicTarihi, String bitisTarihi, Boolean aktif) {
+    public Course(Long id, String ad, String aciklama, String kategori, String seviye,
+                  Integer sure, Integer kapasite, String durum, String baslangicTarihi,
+                  String bitisTarihi, String olusturmaTarihi, Integer aktif) {
         this.id = id;
         this.ad = ad;
         this.aciklama = aciklama;
-        this.egitmen = egitmen;
-        this.program = program;
+        this.kategori = kategori;
+        this.seviye = seviye;
+        this.sure = sure;
+        this.kapasite = kapasite;
+        this.durum = durum;
         this.baslangicTarihi = baslangicTarihi;
         this.bitisTarihi = bitisTarihi;
+        this.olusturmaTarihi = olusturmaTarihi;
         this.aktif = aktif;
     }
 
@@ -56,12 +73,24 @@ public class Course {
         return aciklama;
     }
 
-    public String getEgitmen() {
-        return egitmen;
+    public String getKategori() {
+        return kategori;
     }
 
-    public String getProgram() {
-        return program;
+    public String getSeviye() {
+        return seviye;
+    }
+
+    public Integer getSure() {
+        return sure;
+    }
+
+    public Integer getKapasite() {
+        return kapasite;
+    }
+
+    public String getDurum() {
+        return durum;
     }
 
     public String getBaslangicTarihi() {
@@ -72,7 +101,11 @@ public class Course {
         return bitisTarihi;
     }
 
-    public Boolean getAktif() {
+    public String getOlusturmaTarihi() {
+        return olusturmaTarihi;
+    }
+
+    public Integer getAktif() {
         return aktif;
     }
 
@@ -89,12 +122,24 @@ public class Course {
         this.aciklama = aciklama;
     }
 
-    public void setEgitmen(String egitmen) {
-        this.egitmen = egitmen;
+    public void setKategori(String kategori) {
+        this.kategori = kategori;
     }
 
-    public void setProgram(String program) {
-        this.program = program;
+    public void setSeviye(String seviye) {
+        this.seviye = seviye;
+    }
+
+    public void setSure(Integer sure) {
+        this.sure = sure;
+    }
+
+    public void setKapasite(Integer kapasite) {
+        this.kapasite = kapasite;
+    }
+
+    public void setDurum(String durum) {
+        this.durum = durum;
     }
 
     public void setBaslangicTarihi(String baslangicTarihi) {
@@ -105,7 +150,11 @@ public class Course {
         this.bitisTarihi = bitisTarihi;
     }
 
-    public void setAktif(Boolean aktif) {
+    public void setOlusturmaTarihi(String olusturmaTarihi) {
+        this.olusturmaTarihi = olusturmaTarihi;
+    }
+
+    public void setAktif(Integer aktif) {
         this.aktif = aktif;
     }
 
@@ -115,10 +164,9 @@ public class Course {
                 "id=" + id +
                 ", ad='" + ad + '\'' +
                 ", aciklama='" + aciklama + '\'' +
-                ", egitmen='" + egitmen + '\'' +
-                ", program='" + program + '\'' +
-                ", baslangicTarihi='" + baslangicTarihi + '\'' +
-                ", bitisTarihi='" + bitisTarihi + '\'' +
+                ", kategori='" + kategori + '\'' +
+                ", seviye='" + seviye + '\'' +
+                ", sure=" + sure +
                 ", aktif=" + aktif +
                 '}';
     }

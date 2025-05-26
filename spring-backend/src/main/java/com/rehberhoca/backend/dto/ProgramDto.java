@@ -5,17 +5,19 @@ import com.rehberhoca.backend.entity.Program;
 import java.time.LocalDateTime;
 
 public class ProgramDto {
-    
+
     private Long id;
-    private String program_adi;
     private String aciklama;
-    private Integer sure_dakika;
-    private String zorluk_seviyesi;
+    private String ad;
+    private Integer aktif;
+    private LocalDateTime baslangicTarihi;
+    private LocalDateTime bitisTarihi;
+    private String durum;
+    private Integer kapasite;
     private String kategori;
-    private String olusturan;
-    private LocalDateTime olusturma_tarihi;
-    private LocalDateTime guncelleme_tarihi;
-    private Boolean aktif;
+    private LocalDateTime olusturmaTarihi;
+    private String seviye;
+    private Integer sure;
 
     // Default constructor
     public ProgramDto() {}
@@ -23,15 +25,17 @@ public class ProgramDto {
     // Constructor from Entity
     public ProgramDto(Program program) {
         this.id = program.getId();
-        this.program_adi = program.getProgramAdi();
         this.aciklama = program.getAciklama();
-        this.sure_dakika = program.getSureDakika();
-        this.zorluk_seviyesi = program.getZorlukSeviyesi();
-        this.kategori = program.getKategori();
-        this.olusturan = program.getOlusturan();
-        this.olusturma_tarihi = program.getOlusturmaTarihi();
-        this.guncelleme_tarihi = program.getGuncellemeTarihi();
+        this.ad = program.getAd();
         this.aktif = program.getAktif();
+        this.baslangicTarihi = program.getBaslangicTarihi();
+        this.bitisTarihi = program.getBitisTarihi();
+        this.durum = program.getDurum();
+        this.kapasite = program.getKapasite();
+        this.kategori = program.getKategori();
+        this.olusturmaTarihi = program.getOlusturmaTarihi();
+        this.seviye = program.getSeviye();
+        this.sure = program.getSure();
     }
 
     // Getters and Setters
@@ -43,14 +47,6 @@ public class ProgramDto {
         this.id = id;
     }
 
-    public String getProgram_adi() {
-        return program_adi;
-    }
-
-    public void setProgram_adi(String program_adi) {
-        this.program_adi = program_adi;
-    }
-
     public String getAciklama() {
         return aciklama;
     }
@@ -59,20 +55,52 @@ public class ProgramDto {
         this.aciklama = aciklama;
     }
 
-    public Integer getSure_dakika() {
-        return sure_dakika;
+    public String getAd() {
+        return ad;
     }
 
-    public void setSure_dakika(Integer sure_dakika) {
-        this.sure_dakika = sure_dakika;
+    public void setAd(String ad) {
+        this.ad = ad;
     }
 
-    public String getZorluk_seviyesi() {
-        return zorluk_seviyesi;
+    public Integer getAktif() {
+        return aktif;
     }
 
-    public void setZorluk_seviyesi(String zorluk_seviyesi) {
-        this.zorluk_seviyesi = zorluk_seviyesi;
+    public void setAktif(Integer aktif) {
+        this.aktif = aktif;
+    }
+
+    public LocalDateTime getBaslangicTarihi() {
+        return baslangicTarihi;
+    }
+
+    public void setBaslangicTarihi(LocalDateTime baslangicTarihi) {
+        this.baslangicTarihi = baslangicTarihi;
+    }
+
+    public LocalDateTime getBitisTarihi() {
+        return bitisTarihi;
+    }
+
+    public void setBitisTarihi(LocalDateTime bitisTarihi) {
+        this.bitisTarihi = bitisTarihi;
+    }
+
+    public String getDurum() {
+        return durum;
+    }
+
+    public void setDurum(String durum) {
+        this.durum = durum;
+    }
+
+    public Integer getKapasite() {
+        return kapasite;
+    }
+
+    public void setKapasite(Integer kapasite) {
+        this.kapasite = kapasite;
     }
 
     public String getKategori() {
@@ -83,46 +111,39 @@ public class ProgramDto {
         this.kategori = kategori;
     }
 
-    public String getOlusturan() {
-        return olusturan;
+    public LocalDateTime getOlusturmaTarihi() {
+        return olusturmaTarihi;
     }
 
-    public void setOlusturan(String olusturan) {
-        this.olusturan = olusturan;
+    public void setOlusturmaTarihi(LocalDateTime olusturmaTarihi) {
+        this.olusturmaTarihi = olusturmaTarihi;
     }
 
-    public LocalDateTime getOlusturma_tarihi() {
-        return olusturma_tarihi;
+    public String getSeviye() {
+        return seviye;
     }
 
-    public void setOlusturma_tarihi(LocalDateTime olusturma_tarihi) {
-        this.olusturma_tarihi = olusturma_tarihi;
+    public void setSeviye(String seviye) {
+        this.seviye = seviye;
     }
 
-    public LocalDateTime getGuncelleme_tarihi() {
-        return guncelleme_tarihi;
+    public Integer getSure() {
+        return sure;
     }
 
-    public void setGuncelleme_tarihi(LocalDateTime guncelleme_tarihi) {
-        this.guncelleme_tarihi = guncelleme_tarihi;
-    }
-
-    public Boolean getAktif() {
-        return aktif;
-    }
-
-    public void setAktif(Boolean aktif) {
-        this.aktif = aktif;
+    public void setSure(Integer sure) {
+        this.sure = sure;
     }
 
     @Override
     public String toString() {
         return "ProgramDto{" +
                 "id=" + id +
-                ", program_adi='" + program_adi + '\'' +
+                ", ad='" + ad + '\'' +
                 ", kategori='" + kategori + '\'' +
-                ", zorluk_seviyesi='" + zorluk_seviyesi + '\'' +
-                ", sure_dakika=" + sure_dakika +
+                ", seviye='" + seviye + '\'' +
+                ", sure=" + sure +
+                ", aktif=" + aktif +
                 '}';
     }
 }

@@ -6,52 +6,57 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "programlar")
 public class Program {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name = "program_adi", nullable = false)
-    private String programAdi;
-    
+
     @Column(name = "aciklama", columnDefinition = "TEXT")
     private String aciklama;
-    
-    @Column(name = "sure_dakika")
-    private Integer sureDakika;
-    
-    @Column(name = "zorluk_seviyesi")
-    private String zorlukSeviyesi;
-    
+
+    @Column(name = "ad", nullable = false)
+    private String ad;
+
+    @Column(name = "aktif")
+    private Integer aktif;
+
+    @Column(name = "baslangic_tarihi")
+    private LocalDateTime baslangicTarihi;
+
+    @Column(name = "bitis_tarihi")
+    private LocalDateTime bitisTarihi;
+
+    @Column(name = "durum")
+    private String durum;
+
+    @Column(name = "kapasite")
+    private Integer kapasite;
+
     @Column(name = "kategori")
     private String kategori;
-    
-    @Column(name = "olusturan")
-    private String olusturan;
-    
+
     @Column(name = "olusturma_tarihi")
     private LocalDateTime olusturmaTarihi;
-    
-    @Column(name = "guncelleme_tarihi")
-    private LocalDateTime guncellemeTarihi;
-    
-    @Column(name = "aktif")
-    private Boolean aktif = true;
+
+    @Column(name = "seviye")
+    private String seviye;
+
+    @Column(name = "sure")
+    private Integer sure;
 
     // Default constructor
     public Program() {}
 
     // Constructor
-    public Program(String programAdi, String aciklama, Integer sureDakika, String zorlukSeviyesi, String kategori, String olusturan) {
-        this.programAdi = programAdi;
+    public Program(String ad, String aciklama, String kategori, String seviye, Integer sure, Integer kapasite) {
+        this.ad = ad;
         this.aciklama = aciklama;
-        this.sureDakika = sureDakika;
-        this.zorlukSeviyesi = zorlukSeviyesi;
         this.kategori = kategori;
-        this.olusturan = olusturan;
-        this.olusturmaTarihi = LocalDateTime.now();
-        this.guncellemeTarihi = LocalDateTime.now();
-        this.aktif = true;
+        this.seviye = seviye;
+        this.sure = sure;
+        this.kapasite = kapasite;
+        this.aktif = 1;
+        this.durum = "Aktif";
     }
 
     // Getters and Setters
@@ -63,12 +68,12 @@ public class Program {
         this.id = id;
     }
 
-    public String getProgramAdi() {
-        return programAdi;
+    public String getAd() {
+        return ad;
     }
 
-    public void setProgramAdi(String programAdi) {
-        this.programAdi = programAdi;
+    public void setAd(String ad) {
+        this.ad = ad;
     }
 
     public String getAciklama() {
@@ -79,20 +84,44 @@ public class Program {
         this.aciklama = aciklama;
     }
 
-    public Integer getSureDakika() {
-        return sureDakika;
+    public Integer getAktif() {
+        return aktif;
     }
 
-    public void setSureDakika(Integer sureDakika) {
-        this.sureDakika = sureDakika;
+    public void setAktif(Integer aktif) {
+        this.aktif = aktif;
     }
 
-    public String getZorlukSeviyesi() {
-        return zorlukSeviyesi;
+    public LocalDateTime getBaslangicTarihi() {
+        return baslangicTarihi;
     }
 
-    public void setZorlukSeviyesi(String zorlukSeviyesi) {
-        this.zorlukSeviyesi = zorlukSeviyesi;
+    public void setBaslangicTarihi(LocalDateTime baslangicTarihi) {
+        this.baslangicTarihi = baslangicTarihi;
+    }
+
+    public LocalDateTime getBitisTarihi() {
+        return bitisTarihi;
+    }
+
+    public void setBitisTarihi(LocalDateTime bitisTarihi) {
+        this.bitisTarihi = bitisTarihi;
+    }
+
+    public String getDurum() {
+        return durum;
+    }
+
+    public void setDurum(String durum) {
+        this.durum = durum;
+    }
+
+    public Integer getKapasite() {
+        return kapasite;
+    }
+
+    public void setKapasite(Integer kapasite) {
+        this.kapasite = kapasite;
     }
 
     public String getKategori() {
@@ -103,14 +132,6 @@ public class Program {
         this.kategori = kategori;
     }
 
-    public String getOlusturan() {
-        return olusturan;
-    }
-
-    public void setOlusturan(String olusturan) {
-        this.olusturan = olusturan;
-    }
-
     public LocalDateTime getOlusturmaTarihi() {
         return olusturmaTarihi;
     }
@@ -119,30 +140,30 @@ public class Program {
         this.olusturmaTarihi = olusturmaTarihi;
     }
 
-    public LocalDateTime getGuncellemeTarihi() {
-        return guncellemeTarihi;
+    public String getSeviye() {
+        return seviye;
     }
 
-    public void setGuncellemeTarihi(LocalDateTime guncellemeTarihi) {
-        this.guncellemeTarihi = guncellemeTarihi;
+    public void setSeviye(String seviye) {
+        this.seviye = seviye;
     }
 
-    public Boolean getAktif() {
-        return aktif;
+    public Integer getSure() {
+        return sure;
     }
 
-    public void setAktif(Boolean aktif) {
-        this.aktif = aktif;
+    public void setSure(Integer sure) {
+        this.sure = sure;
     }
 
     @Override
     public String toString() {
         return "Program{" +
                 "id=" + id +
-                ", programAdi='" + programAdi + '\'' +
+                ", ad='" + ad + '\'' +
                 ", kategori='" + kategori + '\'' +
-                ", zorlukSeviyesi='" + zorlukSeviyesi + '\'' +
-                ", sureDakika=" + sureDakika +
+                ", seviye='" + seviye + '\'' +
+                ", sure=" + sure +
                 ", aktif=" + aktif +
                 '}';
     }

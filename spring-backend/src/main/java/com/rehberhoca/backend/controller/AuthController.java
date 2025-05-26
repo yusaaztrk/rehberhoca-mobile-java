@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,35 +60,40 @@ public class AuthController {
         try {
             List<ProgramDto> programs = ogrenciService.getStudentProgramsDetailed(studentId);
 
+            // Create response in the format expected by Android
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
+            response.put("message", "Öğrenci programları başarıyla getirildi");
             response.put("data", programs);
             response.put("count", programs.size());
-            response.put("student_id", studentId);
-            response.put("message", "Öğrenci programları başarıyla getirildi");
+            response.put("studentId", studentId);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("message", "Programlar getirilirken hata oluştu: " + e.getMessage());
+            response.put("data", new ArrayList<>());
+            response.put("count", 0);
+            response.put("studentId", studentId);
             return ResponseEntity.status(500).body(response);
         }
     }
 
     /**
-     * Öğrenci aktif programlarını getir
+     * Öğrenci aktif programlarını getir (Detaylı - Program bilgileri ile birlikte)
      */
     @GetMapping("/student/{studentId}/programs/active")
     public ResponseEntity<Map<String, Object>> getStudentActivePrograms(@PathVariable Long studentId) {
         try {
-            List<OgrenciProgramAtamasi> programs = ogrenciService.getStudentActivePrograms(studentId);
+            List<ProgramDto> programs = ogrenciService.getStudentActiveProgramsDetailed(studentId);
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
+            response.put("message", "Öğrenci aktif programları başarıyla getirildi");
             response.put("data", programs);
             response.put("count", programs.size());
-            response.put("student_id", studentId);
+            response.put("studentId", studentId);
             response.put("active_only", true);
 
             return ResponseEntity.ok(response);
@@ -95,6 +101,9 @@ public class AuthController {
             Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("message", "Aktif programlar getirilirken hata oluştu: " + e.getMessage());
+            response.put("data", new ArrayList<>());
+            response.put("count", 0);
+            response.put("studentId", studentId);
             return ResponseEntity.status(500).body(response);
         }
     }

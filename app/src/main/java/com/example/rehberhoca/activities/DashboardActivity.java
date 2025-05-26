@@ -2,6 +2,7 @@ package com.example.rehberhoca.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.rehberhoca.R;
 import com.example.rehberhoca.adapters.CoursesAdapter;
 import com.example.rehberhoca.models.Course;
+import com.example.rehberhoca.models.CoursesResponse;
 import com.example.rehberhoca.models.Student;
 import com.example.rehberhoca.models.StudentProgram;
 import com.example.rehberhoca.models.StudentProgramsResponse;
@@ -143,7 +145,7 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
     }
 
     /**
-     * Load student courses from API
+     * Load student courses from API - New Clean Implementation
      */
     private void loadStudentCourses() {
         if (currentStudent == null || currentStudent.getId() == null) {
@@ -157,69 +159,103 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
             return;
         }
 
+        Log.d("DashboardActivity", "🔄 Loading courses for student ID: " + currentStudent.getId());
         showLoading(true);
 
-        Call<StudentProgramsResponse> call = apiService.getStudentPrograms(currentStudent.getId());
-        call.enqueue(new Callback<StudentProgramsResponse>() {
-            @Override
-            public void onResponse(Call<StudentProgramsResponse> call, Response<StudentProgramsResponse> response) {
-                showLoading(false);
-                srlCoursesRefresh.setRefreshing(false);
+        Call<CoursesResponse> call = apiService.getStudentPrograms(currentStudent.getId());
+        Log.d("DashboardActivity", "📡 API URL: " + call.request().url());
 
-                if (response.isSuccessful() && response.body() != null) {
-                    StudentProgramsResponse programsResponse = response.body();
-                    if (programsResponse.isSuccess() && programsResponse.getData() != null) {
-                        // Convert StudentProgram to Course objects for display
-                        List<Course> courses = convertProgramsToCourses(programsResponse.getData());
-                        coursesAdapter.updateCourses(courses);
-                        showNoCourses(courses.isEmpty());
-                    } else {
-                        showError(programsResponse.getMessage() != null ?
-                                programsResponse.getMessage() : "Programlar yüklenemedi");
-                        showNoCourses(true);
-                    }
-                } else {
-                    String errorMessage = NetworkUtils.getErrorMessage(response);
-                    showError(errorMessage);
-                    showNoCourses(true);
-                }
+        call.enqueue(new Callback<CoursesResponse>() {
+            @Override
+            public void onResponse(Call<CoursesResponse> call, Response<CoursesResponse> response) {
+                handleCoursesResponse(response);
             }
 
             @Override
-            public void onFailure(Call<StudentProgramsResponse> call, Throwable t) {
-                showLoading(false);
-                srlCoursesRefresh.setRefreshing(false);
-                String errorMessage = NetworkUtils.getErrorMessage(t);
-                showError(errorMessage);
-                showNoCourses(true);
+            public void onFailure(Call<CoursesResponse> call, Throwable t) {
+                handleCoursesFailure(t);
             }
         });
     }
 
     /**
-     * Convert StudentProgram objects to Course objects for display
-     * @param programs List of StudentProgram objects
-     * @return List of Course objects
+     * Handle successful API response
      */
-    private List<Course> convertProgramsToCourses(List<StudentProgram> programs) {
-        List<Course> courses = new ArrayList<>();
+    private void handleCoursesResponse(Response<CoursesResponse> response) {
+        Log.d("DashboardActivity", "📥 Response Code: " + response.code());
+        showLoading(false);
+        srlCoursesRefresh.setRefreshing(false);
 
-        for (StudentProgram program : programs) {
-            Course course = new Course();
-            course.setId(program.getProgramId());
-            course.setAd("Program " + program.getProgramId()); // Placeholder - gerçek program adı için ayrı API gerekli
-            course.setAciklama(program.getNotlar() != null ? program.getNotlar() : "Program açıklaması");
-            course.setEgitmen(program.getOlusturan() != null ? program.getOlusturan() : "Bilinmiyor");
-            course.setProgram(program.getDurum());
-            course.setBaslangicTarihi(program.getAtamaTarihi());
-            course.setBitisTarihi(program.getGuncellemeTarihi());
-            course.setAktif(program.isActive());
-
-            courses.add(course);
+        if (!response.isSuccessful() || response.body() == null) {
+            Log.e("DashboardActivity", "❌ Response not successful or body is null");
+            showError("Sunucudan yanıt alınamadı");
+            showNoCourses(true);
+            return;
         }
 
-        return courses;
+        CoursesResponse coursesResponse = response.body();
+        Log.d("DashboardActivity", "✅ Response received: " + coursesResponse.toString());
+
+        if (!coursesResponse.isSuccess()) {
+            Log.e("DashboardActivity", "❌ API returned success=false");
+            showError(coursesResponse.getMessage() != null ?
+                     coursesResponse.getMessage() : "Programlar yüklenemedi");
+            showNoCourses(true);
+            return;
+        }
+
+        List<Course> courses = coursesResponse.getData();
+        if (courses == null) {
+            Log.e("DashboardActivity", "❌ Courses data is null");
+            showError("Ders verisi bulunamadı");
+            showNoCourses(true);
+            return;
+        }
+
+        Log.d("DashboardActivity", "📚 Courses loaded: " + courses.size());
+        displayCourses(courses);
     }
+
+    /**
+     * Handle API failure
+     */
+    private void handleCoursesFailure(Throwable t) {
+        Log.e("DashboardActivity", "💥 API call failed: " + t.getMessage(), t);
+        showLoading(false);
+        srlCoursesRefresh.setRefreshing(false);
+        showError("Bağlantı hatası: " + t.getMessage());
+        showNoCourses(true);
+    }
+
+    /**
+     * Display courses in RecyclerView
+     */
+    private void displayCourses(List<Course> courses) {
+        Log.d("DashboardActivity", "🎯 Displaying " + courses.size() + " courses");
+
+        if (courses.isEmpty()) {
+            Log.d("DashboardActivity", "📭 No courses to display");
+            showNoCourses(true);
+            return;
+        }
+
+        // Log each course for debugging
+        for (int i = 0; i < courses.size(); i++) {
+            Course course = courses.get(i);
+            Log.d("DashboardActivity", "📖 Course " + (i+1) + ": " + course.getAd());
+        }
+
+        // Update adapter
+        Log.d("DashboardActivity", "🔄 Updating adapter...");
+        coursesAdapter.updateCourses(courses);
+
+        // Show RecyclerView, hide no courses message
+        showNoCourses(false);
+
+        Log.d("DashboardActivity", "✅ Courses display completed");
+    }
+
+
 
     /**
      * Refresh courses
@@ -241,12 +277,25 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
     }
 
     /**
-     * Show/hide no courses message
+     * Show/hide no courses message - Clean Implementation
      * @param show true to show message, false to hide
      */
     private void showNoCourses(boolean show) {
-        tvNoCoursesMessage.setVisibility(show ? View.VISIBLE : View.GONE);
-        rvCoursesList.setVisibility(show ? View.GONE : View.VISIBLE);
+        Log.d("DashboardActivity", "👁️ showNoCourses called with: " + show);
+
+        if (show) {
+            // Show "no courses" message, hide RecyclerView
+            tvNoCoursesMessage.setVisibility(View.VISIBLE);
+            rvCoursesList.setVisibility(View.GONE);
+            Log.d("DashboardActivity", "📭 Showing 'no courses' message");
+        } else {
+            // Hide "no courses" message, show RecyclerView
+            tvNoCoursesMessage.setVisibility(View.GONE);
+            rvCoursesList.setVisibility(View.VISIBLE);
+            Log.d("DashboardActivity", "📚 Showing courses RecyclerView");
+        }
+
+        Log.d("DashboardActivity", "✅ UI visibility updated successfully");
     }
 
     /**
