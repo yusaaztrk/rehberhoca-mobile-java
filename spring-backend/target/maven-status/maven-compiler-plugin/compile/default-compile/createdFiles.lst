@@ -1,0 +1,10 @@
+com\rehberhoca\backend\service\OgrenciService.class
+com\rehberhoca\backend\repository\OgrenciRepository.class
+com\rehberhoca\backend\repository\OgrenciProgramAtamasiRepository.class
+com\rehberhoca\backend\controller\AuthController.class
+com\rehberhoca\backend\dto\StudentDto.class
+com\rehberhoca\backend\entity\OgrenciProgramAtamasi.class
+com\rehberhoca\backend\entity\Ogrenci.class
+com\rehberhoca\backend\dto\LoginRequest.class
+com\rehberhoca\backend\RehberHocaBackendApplication.class
+com\rehberhoca\backend\dto\LoginResponse.class

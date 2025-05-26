@@ -1,33 +1,32 @@
 <?php
 /**
  * Veritabanı Bağlantı Konfigürasyonu
- * Rehber Hoca Mobile API için SQL Server bağlantısı
+ * Rehber Hoca Mobile API için MySQL bağlantısı
  */
 
 class Database {
-    // SQL Server veritabanı bilgileri - kendi bilgilerinizle güncelleyin
-    private $host = "localhost"; // SQL Server host adresi
-    private $db_name = "RehberHoca"; // Veritabanı adınız
-    private $username = "sa"; // SQL Server kullanıcı adı
-    private $password = ""; // SQL Server şifresi
-    private $port = "1433"; // SQL Server port (varsayılan 1433)
+    // MySQL veritabanı bilgileri
+    private $host = "localhost";
+    private $db_name = "rehber_hoca_db"; // Sizin veritabanı adınız
+    private $username = "root";
+    private $password = "";
+    private $charset = "utf8mb4";
 
     public $conn;
 
     /**
-     * SQL Server veritabanı bağlantısını al
+     * MySQL veritabanı bağlantısını al
      */
     public function getConnection() {
         $this->conn = null;
 
         try {
-            // SQL Server için DSN
-            $dsn = "sqlsrv:Server=" . $this->host . "," . $this->port . ";Database=" . $this->db_name;
+            $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=" . $this->charset;
             $this->conn = new PDO($dsn, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch(PDOException $exception) {
-            error_log("SQL Server bağlantı hatası: " . $exception->getMessage());
+            error_log("MySQL bağlantı hatası: " . $exception->getMessage());
             echo json_encode([
                 "success" => false,
                 "message" => "Veritabanı bağlantı hatası: " . $exception->getMessage()

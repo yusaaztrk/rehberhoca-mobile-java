@@ -5,15 +5,21 @@ import com.google.gson.annotations.SerializedName;
 public class LoginResponse {
     @SerializedName("success")
     private boolean success;
-    
+
     @SerializedName("message")
     private String message;
-    
+
     @SerializedName("student")
     private Student student;
-    
+
     @SerializedName("token")
     private String token; // JWT token (optional)
+
+    @SerializedName("programs")
+    private java.util.List<StudentProgram> programs; // Student programs
+
+    @SerializedName("program_count")
+    private int programCount; // Number of programs
 
     // Default constructor
     public LoginResponse() {}
@@ -24,6 +30,17 @@ public class LoginResponse {
         this.message = message;
         this.student = student;
         this.token = token;
+    }
+
+    // Constructor with programs
+    public LoginResponse(boolean success, String message, Student student, String token,
+                        java.util.List<StudentProgram> programs, int programCount) {
+        this.success = success;
+        this.message = message;
+        this.student = student;
+        this.token = token;
+        this.programs = programs;
+        this.programCount = programCount;
     }
 
     // Getters
@@ -43,6 +60,14 @@ public class LoginResponse {
         return token;
     }
 
+    public java.util.List<StudentProgram> getPrograms() {
+        return programs;
+    }
+
+    public int getProgramCount() {
+        return programCount;
+    }
+
     // Setters
     public void setSuccess(boolean success) {
         this.success = success;
@@ -58,6 +83,14 @@ public class LoginResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public void setPrograms(java.util.List<StudentProgram> programs) {
+        this.programs = programs;
+    }
+
+    public void setProgramCount(int programCount) {
+        this.programCount = programCount;
     }
 
     @Override

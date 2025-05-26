@@ -8,7 +8,7 @@ class Student {
     private $conn;
     private $table_name = "ogrenciler";
 
-    // Öğrenci özellikleri (SQL Server tablo yapısına göre)
+    // Öğrenci özellikleri (MySQL tablo yapısına göre)
     public $id;
     public $ad_soyad;
     public $email;
@@ -26,7 +26,7 @@ class Student {
      */
     public function login($email, $sifre) {
         try {
-            // SQL sorgusu - email ve şifre kontrolü (SQL Server tablo yapısına göre)
+            // SQL sorgusu - email ve şifre kontrolü
             $query = "SELECT id, ad_soyad, email, telefon, kayit_tarihi, aktif
                      FROM " . $this->table_name . "
                      WHERE email = ? AND sifre = ?";
@@ -39,10 +39,10 @@ class Student {
 
                 // Öğrenci bilgilerini set et
                 $this->id = $row['id'];
-                $this->adSoyad = $row['adSoyad'];
+                $this->ad_soyad = $row['ad_soyad'];
                 $this->email = $row['email'];
                 $this->telefon = $row['telefon'];
-                $this->kayitTarihi = $row['kayitTarihi'];
+                $this->kayit_tarihi = $row['kayit_tarihi'];
                 $this->aktif = $row['aktif'];
 
                 return true;
@@ -114,10 +114,10 @@ class Student {
     public function toArray() {
         return [
             "id" => $this->id,
-            "adSoyad" => $this->adSoyad,
+            "ad_soyad" => $this->ad_soyad,
             "email" => $this->email,
             "telefon" => $this->telefon,
-            "kayitTarihi" => $this->kayitTarihi,
+            "kayit_tarihi" => $this->kayit_tarihi,
             "aktif" => (bool)$this->aktif
         ];
     }

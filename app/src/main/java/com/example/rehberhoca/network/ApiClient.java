@@ -8,13 +8,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    // Base URL for the API - Apache Server
-    private static final String BASE_URL = "http://10.0.2.2/rehberhoca/"; // Android Emulator
+    // Base URL for the API - Spring Boot Backend
+    private static final String BASE_URL = "http://10.0.2.2:8081/api/"; // Android Emulator
 
     // Alternative URLs for different environments
-    // For physical device on same network: "http://192.168.1.XXX/rehberhoca/"
-    // For localhost XAMPP: "http://localhost/rehberhoca/"
-    // For production: "https://your-domain.com/rehberhoca/"
+    // For physical device: "http://192.168.1.XXX/rehberhoca/php-backend/"
+    // For localhost: "http://localhost/rehberhoca/php-backend/"
+    // For XAMPP: "http://localhost:80/rehberhoca/php-backend/"
 
     private static Retrofit retrofit;
     private static ApiService apiService;

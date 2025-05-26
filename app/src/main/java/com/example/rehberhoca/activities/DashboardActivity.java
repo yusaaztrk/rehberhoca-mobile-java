@@ -17,11 +17,14 @@ import com.example.rehberhoca.R;
 import com.example.rehberhoca.adapters.CoursesAdapter;
 import com.example.rehberhoca.models.Course;
 import com.example.rehberhoca.models.Student;
+import com.example.rehberhoca.models.StudentProgram;
+import com.example.rehberhoca.models.StudentProgramsResponse;
 import com.example.rehberhoca.network.ApiClient;
 import com.example.rehberhoca.network.ApiService;
 import com.example.rehberhoca.network.NetworkUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DashboardActivity extends BaseActivity implements CoursesAdapter.OnCourseClickListener {
-    
+
     // UI Components
     private Toolbar toolbarDashboard;
     private TextView tvWelcomeMessage;
@@ -39,11 +42,11 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
     private ProgressBar pbCoursesLoading;
     private TextView tvNoCoursesMessage;
     private FloatingActionButton fabRefresh;
-    
+
     // Data & Adapters
     private CoursesAdapter coursesAdapter;
     private Student currentStudent;
-    
+
     // Network
     private ApiService apiService;
 
@@ -51,13 +54,13 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        
+
         // Check if user is logged in
         if (!prefsManager.isLoggedIn()) {
             navigateToLogin();
             return;
         }
-        
+
         initViews();
         setupToolbar();
         setupRecyclerView();
@@ -98,7 +101,7 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
     private void setupRecyclerView() {
         coursesAdapter = new CoursesAdapter();
         coursesAdapter.setOnCourseClickListener(this);
-        
+
         rvCoursesList.setLayoutManager(new LinearLayoutManager(this));
         rvCoursesList.setAdapter(coursesAdapter);
         rvCoursesList.setHasFixedSize(true);
@@ -147,26 +150,34 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
             showError("Öğrenci bilgileri bulunamadı");
             return;
         }
-        
+
         // Check network connectivity
         if (!isNetworkAvailable()) {
             showNetworkError();
             return;
         }
-        
+
         showLoading(true);
-        
-        Call<List<Course>> call = apiService.getStudentCourses(currentStudent.getId());
-        call.enqueue(new Callback<List<Course>>() {
+
+        Call<StudentProgramsResponse> call = apiService.getStudentPrograms(currentStudent.getId());
+        call.enqueue(new Callback<StudentProgramsResponse>() {
             @Override
-            public void onResponse(Call<List<Course>> call, Response<List<Course>> response) {
+            public void onResponse(Call<StudentProgramsResponse> call, Response<StudentProgramsResponse> response) {
                 showLoading(false);
                 srlCoursesRefresh.setRefreshing(false);
-                
+
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Course> courses = response.body();
-                    coursesAdapter.updateCourses(courses);
-                    showNoCourses(courses.isEmpty());
+                    StudentProgramsResponse programsResponse = response.body();
+                    if (programsResponse.isSuccess() && programsResponse.getData() != null) {
+                        // Convert StudentProgram to Course objects for display
+                        List<Course> courses = convertProgramsToCourses(programsResponse.getData());
+                        coursesAdapter.updateCourses(courses);
+                        showNoCourses(courses.isEmpty());
+                    } else {
+                        showError(programsResponse.getMessage() != null ?
+                                programsResponse.getMessage() : "Programlar yüklenemedi");
+                        showNoCourses(true);
+                    }
                 } else {
                     String errorMessage = NetworkUtils.getErrorMessage(response);
                     showError(errorMessage);
@@ -175,7 +186,7 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
             }
 
             @Override
-            public void onFailure(Call<List<Course>> call, Throwable t) {
+            public void onFailure(Call<StudentProgramsResponse> call, Throwable t) {
                 showLoading(false);
                 srlCoursesRefresh.setRefreshing(false);
                 String errorMessage = NetworkUtils.getErrorMessage(t);
@@ -183,6 +194,31 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
                 showNoCourses(true);
             }
         });
+    }
+
+    /**
+     * Convert StudentProgram objects to Course objects for display
+     * @param programs List of StudentProgram objects
+     * @return List of Course objects
+     */
+    private List<Course> convertProgramsToCourses(List<StudentProgram> programs) {
+        List<Course> courses = new ArrayList<>();
+
+        for (StudentProgram program : programs) {
+            Course course = new Course();
+            course.setId(program.getProgramId());
+            course.setAd("Program " + program.getProgramId()); // Placeholder - gerçek program adı için ayrı API gerekli
+            course.setAciklama(program.getNotlar() != null ? program.getNotlar() : "Program açıklaması");
+            course.setEgitmen(program.getOlusturan() != null ? program.getOlusturan() : "Bilinmiyor");
+            course.setProgram(program.getDurum());
+            course.setBaslangicTarihi(program.getAtamaTarihi());
+            course.setBitisTarihi(program.getGuncellemeTarihi());
+            course.setAktif(program.isActive());
+
+            courses.add(course);
+        }
+
+        return courses;
     }
 
     /**
@@ -230,7 +266,7 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        
+
         if (id == R.id.action_refresh) {
             refreshCourses();
             return true;
@@ -238,7 +274,7 @@ public class DashboardActivity extends BaseActivity implements CoursesAdapter.On
             showLogoutConfirmation();
             return true;
         }
-        
+
         return super.onOptionsItemSelected(item);
     }
 

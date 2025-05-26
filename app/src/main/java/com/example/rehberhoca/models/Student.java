@@ -6,19 +6,19 @@ import java.time.LocalDateTime;
 public class Student {
     @SerializedName("id")
     private Long id;
-    
-    @SerializedName("adSoyad")
+
+    @SerializedName("ad_soyad")
     private String adSoyad;
-    
+
     @SerializedName("email")
     private String email;
-    
+
     @SerializedName("telefon")
     private String telefon;
-    
-    @SerializedName("kayitTarihi")
+
+    @SerializedName("kayit_tarihi")
     private String kayitTarihi; // Using String for easier JSON parsing
-    
+
     @SerializedName("aktif")
     private Boolean aktif;
 

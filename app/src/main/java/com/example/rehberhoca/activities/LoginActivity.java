@@ -21,7 +21,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity {
-    
+
     // UI Components
     private EditText etEmailInput;
     private EditText etPasswordInput;
@@ -29,7 +29,7 @@ public class LoginActivity extends BaseActivity {
     private TextView tvErrorMessage;
     private TextView tvForgotPassword;
     private ProgressBar pbLoginLoading;
-    
+
     // Network
     private ApiService apiService;
 
@@ -37,13 +37,13 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        
+
         // Check if already logged in
         if (prefsManager.isLoggedIn()) {
             navigateToDashboard();
             return;
         }
-        
+
         initViews();
         setupClickListeners();
         initNetwork();
@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity {
      */
     private void setupClickListeners() {
         btnLogin.setOnClickListener(v -> performLogin());
-        
+
         tvForgotPassword.setOnClickListener(v -> {
             // TODO: Implement forgot password functionality
             showToast("Şifre sıfırlama özelliği yakında eklenecek");
@@ -86,46 +86,52 @@ public class LoginActivity extends BaseActivity {
     private void performLogin() {
         String email = etEmailInput.getText().toString().trim();
         String password = etPasswordInput.getText().toString().trim();
-        
+
         // Validate inputs
         if (!validateInputs(email, password)) {
             return;
         }
-        
+
         // Check network connectivity
         if (!isNetworkAvailable()) {
             showNetworkError();
             return;
         }
-        
+
         // Show loading state
         showLoading(true);
-        
+
         // Create login request
         LoginRequest loginRequest = new LoginRequest(email, password);
-        
+
         // Make API call
         Call<LoginResponse> call = apiService.login(loginRequest);
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 showLoading(false);
-                
+
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
-                    
+
                     if (loginResponse.isSuccess() && loginResponse.getStudent() != null) {
                         // Login successful
                         prefsManager.saveLoginSession(loginResponse.getStudent());
                         if (loginResponse.getToken() != null) {
                             prefsManager.saveAuthToken(loginResponse.getToken());
                         }
-                        
-                        showToast("Giriş başarılı");
+
+                        // Show program count if available
+                        String successMessage = "Giriş başarılı";
+                        if (loginResponse.getPrograms() != null && loginResponse.getProgramCount() > 0) {
+                            successMessage += " - " + loginResponse.getProgramCount() + " program bulundu";
+                        }
+
+                        showToast(successMessage);
                         navigateToDashboard();
                     } else {
                         // Login failed
-                        String errorMessage = loginResponse.getMessage() != null ? 
+                        String errorMessage = loginResponse.getMessage() != null ?
                                 loginResponse.getMessage() : getString(R.string.error_login_failed);
                         showError(errorMessage);
                     }
@@ -159,7 +165,7 @@ public class LoginActivity extends BaseActivity {
             etEmailInput.requestFocus();
             return false;
         }
-        
+
         // Validate password
         String passwordError = ValidationUtils.getPasswordError(password);
         if (passwordError != null) {
@@ -167,7 +173,7 @@ public class LoginActivity extends BaseActivity {
             etPasswordInput.requestFocus();
             return false;
         }
-        
+
         return true;
     }
 
@@ -180,7 +186,7 @@ public class LoginActivity extends BaseActivity {
         pbLoginLoading.setVisibility(show ? View.VISIBLE : View.GONE);
         btnLogin.setEnabled(!show);
         btnLogin.setText(show ? R.string.login_loading : R.string.login_button);
-        
+
         // Hide error message when loading
         if (show) {
             hideError();
